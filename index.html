@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A Christmas Surprise for Alphonsa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body, html {
+            background: radial-gradient(circle at center, #0f172a 0%, #050a18 100%); 
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        #snow-canvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 1; pointer-events: none;
+        }
+
+        .page-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 80px 20px 120px 20px;
+        }
+
+        .gallery-section {
+            width: 100%;
+            max-width: 1000px;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .main-heading {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 7vw, 4rem);
+            font-style: italic;
+            background: linear-gradient(to bottom, #fde68a, #ffafcc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 40px;
+            filter: drop-shadow(0 0 10px rgba(255, 175, 204, 0.3));
+            line-height: 1.2;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            width: 100%;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 10px 10px 30px 10px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.7);
+            border-radius: 4px;
+            animation: float 5s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(-1deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+
+        .memory-photo {
+            width: 100%;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+        }
+
+        .letter-section {
+            max-width: 650px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            padding: clamp(30px, 6vw, 60px);
+            border-radius: 30px;
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            line-height: 1.8;
+            margin-top: 20px;
+        }
+
+        .letter-section p {
+            margin-bottom: 25px;
+            font-size: 1.05rem;
+            font-weight: 300;
+            opacity: 0.95;
+            text-align: left;
+        }
+
+        .signature-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: #ffafcc;
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        #scratch-canvas {
+            position: absolute; 
+            top: 0; left: 0;
+            z-index: 10;
+            cursor: none;
+            touch-action: none;
+            /* Starts as non-clickable so user can scroll first */
+            pointer-events: none; 
+            opacity: 1;
+        }
+
+        /* TOGGLE BUTTON UI */
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-btn {
+            background: #ffafcc;
+            color: #050a18;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 5px 15px rgba(255, 175, 204, 0.4);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .toggle-btn.active {
+            background: #a2d2ff;
+            transform: scale(1.1);
+        }
+
+        .instruction {
+            background: rgba(0,0,0,0.6);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: white;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="snow-canvas"></canvas>
+
+    <div class="page-content" id="content">
+        <section class="gallery-section">
+            <h1 class="main-heading">Merry Christmas & Happy New Year</h1>
+            <div class="photo-grid">
+                <div class="polaroid"><img src="friend1.jpg" class="memory-photo"></div>
+                <div class="polaroid"><img src="friend2.jpeg" class="memory-photo"></div>
+                <div class="polaroid"><img src="friend3.jpeg" class="memory-photo"></div>
+                <div class="polaroid"><img src="friend4.jpg" class="memory-photo"></div>
+            </div>
+        </section>
+
+        <div class="letter-section">
+            <p>Dear Alphonsa,</p>
+            <p>Merry Christmas and a very Happy New Year! I wanted to take this moment to tell you how much I admire the person you are. You have a 'yes, let’s go' spirit that is truly rare—no matter how you are feeling or what battles you are fighting with your health, you always show up. Your kindness and your unique perspective on life are things I genuinely look up to.</p>
+            <p>I know I haven’t always been the friend you deserved. Looking back, there were times I caused you trouble and hurt, often without even explaining the reasons why. For every time I wasn't there for you and for the difficulties I brought into your life, I am deeply sorry for everything.</p>
+            <p>Moving forward, I hope you always protect that happy mindset of yours. I truly wish for this year to be the door that opens to all your dreams—your travel plans, your career goals, and perfect health. Please know that my door is always open if you ever need to vent or talk, and I promise to be a better listener and more open with you, too.</p>
+            <span class="signature-name">By Angel</span>
+        </div>
+    </div>
+
+    <canvas id="scratch-canvas"></canvas>
+
+    <div class="controls">
+        <div class="instruction" id="hint">Scroll down to see the letter!</div>
+        <button class="toggle-btn" id="mode-btn">👆 Start Wiping Fog</button>
+    </div>
+
+    <script>
+        const sCanvas = document.getElementById('scratch-canvas');
+        const sCtx = sCanvas.getContext('2d');
+        const modeBtn = document.getElementById('mode-btn');
+        const hint = document.getElementById('hint');
+        let isWipeMode = false;
+        let isDrawing = false;
+
+        function init() {
+            const content = document.getElementById('content');
+            sCanvas.width = window.innerWidth;
+            sCanvas.height = content.offsetHeight + 160;
+
+            sCtx.globalCompositeOperation = 'source-over';
+            sCtx.fillStyle = "#cfd8dc"; 
+            sCtx.fillRect(0, 0, sCanvas.width, sCanvas.height);
+            for(let i=0; i<800; i++) {
+                sCtx.fillStyle = 'rgba(255,255,255,0.4)';
+                sCtx.fillRect(Math.random()*sCanvas.width, Math.random()*sCanvas.height, 2, 2);
+            }
+            sCtx.globalCompositeOperation = 'destination-out';
+            sCtx.shadowBlur = 35; 
+            sCtx.shadowColor = 'black';
+        }
+
+        // Toggle logic
+        modeBtn.addEventListener('click', () => {
+            isWipeMode = !isWipeMode;
+            if(isWipeMode) {
+                sCanvas.style.pointerEvents = "auto";
+                modeBtn.innerText = "Switch to Scrolling";
+                modeBtn.classList.add('active');
+                hint.innerText = "Wipe the fog with your finger!";
+            } else {
+                sCanvas.style.pointerEvents = "none";
+                modeBtn.innerText = "Start Wiping Fog";
+                modeBtn.classList.remove('active');
+                hint.innerText = "Scroll down to see more!";
+            }
+        });
+
+        function scratch(x, y) {
+            const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+            sCtx.beginPath();
+            sCtx.arc(x, y + scrollY, 45, 0, Math.PI * 2);
+            sCtx.fill();
+        }
+
+        sCanvas.addEventListener('mousedown', () => isDrawing = true);
+        window.addEventListener('mouseup', () => isDrawing = false);
+        sCanvas.addEventListener('mousemove', (e) => {
+            if(isDrawing && isWipeMode) scratch(e.clientX, e.clientY);
+        });
+
+        sCanvas.addEventListener('touchstart', (e) => {
+            if(isWipeMode) isDrawing = true;
+        });
+        sCanvas.addEventListener('touchmove', (e) => {
+            if(isDrawing && isWipeMode) {
+                const t = e.touches[0];
+                scratch(t.clientX, t.clientY);
+            }
+        });
+        window.addEventListener('touchend', () => isDrawing = false);
+
+        // Snow logic
+        const snCanvas = document.getElementById('snow-canvas');
+        const snCtx = snCanvas.getContext('2d');
+        let flakes = [];
+        function initSnow() {
+            snCanvas.width = window.innerWidth; snCanvas.height = window.innerHeight;
+            flakes = [];
+            for(let i=0; i<60; i++) flakes.push({x: Math.random()*snCanvas.width, y: Math.random()*snCanvas.height, r: Math.random()*3+1});
+        }
+        function drawSnow() {
+            snCtx.clearRect(0,0,snCanvas.width, snCanvas.height);
+            snCtx.fillStyle = "white"; snCtx.beginPath();
+            for(let f of flakes) { snCtx.moveTo(f.x, f.y); snCtx.arc(f.x, f.y, f.r, 0, Math.PI*2); }
+            snCtx.fill();
+            for(let f of flakes) { f.y += 1; if(f.y > snCanvas.height) f.y = -10; }
+            requestAnimationFrame(drawSnow);
+        }
+
+        window.addEventListener('load', () => { init(); initSnow(); drawSnow(); });
+        window.addEventListener('resize', init);
+    </script>
+</body>
+</html>
